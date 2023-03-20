@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "231486813710",
+    "project_id": "bellbuoy-57663",
+    "storage_bucket": "bellbuoy-57663.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231486813710:android:49019f2631b99427caee5f",
+        "android_client_info": {
+          "package_name": "codeflux.bellbuoy.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "231486813710-0o74587oelbdfnvl4jgqb9fia28hqjev.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_GJKn7D2LlN_SCXPE5I70hQD0InpQi60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "231486813710-0o74587oelbdfnvl4jgqb9fia28hqjev.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "231486813710-dsrjp8c8p4mgftp878ci9kudo21p13di.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bellbuoy.mobile"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
