@@ -57,7 +57,7 @@ android {
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
         minSdkVersion 19
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 454//flutterVersionCode.toInteger()
+        versionCode 455//flutterVersionCode.toInteger()
         versionName '2.0'//flutterVersionName
     }
 
