@@ -39,6 +39,8 @@ class Global {
       "${adminUri}notify/GetNotifications";
   static const String saveNotificationToken =
       "${adminUri}notify/saveDeviceToken";
+  static const String getMessageDeleteEndpoint =
+      "${adminUri}notify/messageUserDelete";
 
   Global._internal();
 }

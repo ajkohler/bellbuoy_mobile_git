@@ -12,6 +12,7 @@ void main() async {
     _defaultHome = new Home();
   }
   runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Bellbuoy',
       theme: ThemeData(
         primarySwatch: Colors.teal,

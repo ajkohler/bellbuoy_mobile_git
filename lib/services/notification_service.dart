@@ -7,6 +7,7 @@ import '../classes/global.dart';
 import '../dtos/portfolio_manager_dto.dart';
 import 'local_storage_service.dart';
 
+//Dead code
 class NotificationService {
   Future<List<NotificationDto>> getNotifications() async {
     List<NotificationDto> list = [];
@@ -19,6 +20,7 @@ class NotificationService {
     return list;
   }
 
+  //Dead Code
   Future<void> updateNotifications() async {
     var username = await LocalStorageService().username();
     var getNotificationUrl =
@@ -29,7 +31,7 @@ class NotificationService {
     if (response.statusCode == 200) {
       List dto = json.decode(response.body);
       if (dto.isNotEmpty) {
-        //await LocalStorageService().deleteNotification();
+        await LocalStorageService().deleteNotification();
         var list = await LocalStorageService().getNotifications();
         for (var element in dto) {
           NotificationDto notificationDto = NotificationDto(
@@ -43,6 +45,24 @@ class NotificationService {
     }
   }
 
+  //Current working code
+  static Future<List?> getAllNotification() async {
+    var username = await LocalStorageService().username();
+    var getNotificationUrl =
+        Uri.parse('${Global.getNotificationsEndpoint}?username=$username');
+
+    var response = await http.get(getNotificationUrl);
+
+    if (response.statusCode == 200) {
+      List notifications = jsonDecode(response.body) as List;
+      return notifications;
+    } else {
+      return null;
+    }
+  }
+
+  //Current working code
+
   Future<List<PortfolioManagerDto>> getPortfolioManagers() async {
     List<PortfolioManagerDto> list = [];
     var managers = await LocalStorageService().getPortfolioManagers();
@@ -52,7 +72,6 @@ class NotificationService {
       list.add(manager);
     }
 
-    print(list);
     return list;
   }
 }
