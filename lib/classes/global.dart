@@ -11,12 +11,15 @@ class Global {
   static const String usersUri = "https://clientzoneapi.bellbuoy.co.za/";
   static const String documentsUri = "https://docapi.bellbuoy.co.za/";
   static const String adminUri = "https://adminzoneapi.bellbuoy.co.za/";
+
   static const String invoiceUri =
       "https://statementapi.bellbuoy.co.za/buildpdf.aspx";
 
   static const String tokenEndpoint = "${schemeUri}token";
   static const String getUserDetailsByTokenEndpoint =
       "$schemeUri/api/account/GetLoggedInUserMobile";
+  static const String localHostUrl="http://10.0.2.2:10938/";
+  static const String getGovernBodyEndpoint="${adminUri}api/Approver/IsAnApproverMobile";
 
   // Documents
   static const String getDocumentsEndpoint =
@@ -39,7 +42,7 @@ class Global {
       "${adminUri}notify/GetNotifications";
   static const String saveNotificationToken =
       "${adminUri}notify/saveDeviceToken";
-  static const String getMessageDeleteEndpoint =
+  static const String getMessageDeleteEndpoint=
       "${adminUri}notify/messageUserDelete";
 
   Global._internal();

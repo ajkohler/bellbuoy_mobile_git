@@ -4,7 +4,10 @@ import 'package:bellbuoy_mobile/services/statement_service.dart';
 import 'package:bellbuoy_mobile/ui/custom_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../classes/global.dart';
+import '../services/local_storage_service.dart';
 import 'nav_drawer.dart';
 
 class Statements extends StatefulWidget {
@@ -228,6 +231,54 @@ class _MyHomePageState extends State<Statements> {
 
     String end =
         '${endDate.year}-${endDate.month.toString().length == 1 ? '0${endDate.month}' : endDate.month}-${endDate.day.toString().length == 1 ? '0${endDate.day}' : endDate.day}';
-    StatementService().openStatement(start, end);
+    //StatementService().openStatement(start, end);
+    openStatement2(start, end);
+  }
+
+//REMOVE BELOW
+  Future<void> _showAlertDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // <-- SEE HERE
+          title: const Text('Cannot launch URL'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Unfortunately you can not launch the url'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<String> getUsername() async {
+    return await LocalStorageService().username();
+  }
+
+  void openStatement2(String start, String end) async {
+    String username = await getUsername();
+    var url = Uri.parse(
+        '${Global.invoiceUri}?customerNo=$username&dateFrom=$start&dateTo=$end&format=pdf');
+    try {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+      print("Can open url");
+    } catch (Exception) {
+      _showAlertDialog();
+      print("Cannot open url");
+      CupertinoAlertDialog(title: Text("Could not open URL"));
+    }
   }
 }

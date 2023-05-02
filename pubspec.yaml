@@ -47,6 +47,9 @@ dependencies:
   overlay_support:
   firebase_core:
   firebase_messaging:
+  flutter_phoenix: ^1.1.0
+  progress_state_button: ^1.0.4
+  restart_app: ^1.1.1+1
 
 
 dev_dependencies:

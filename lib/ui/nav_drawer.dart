@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:bellbuoy_mobile/classes/user.dart';
+import 'package:bellbuoy_mobile/services/approval_service.dart';
 import 'package:bellbuoy_mobile/services/authentication_service.dart';
+import 'package:bellbuoy_mobile/services/home_service.dart';
 import 'package:bellbuoy_mobile/ui/approvals.dart';
 import 'package:bellbuoy_mobile/ui/contact_us.dart';
 import 'package:bellbuoy_mobile/ui/home.dart';
@@ -7,9 +12,14 @@ import 'package:bellbuoy_mobile/ui/notifications.dart';
 import 'package:bellbuoy_mobile/ui/statements.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:restart_app/restart_app.dart';
 
+import '../classes/global.dart';
+import '../services/authentication_service.dart';
+import '../services/local_storage_service.dart';
 import 'documents.dart';
 import 'login.dart';
+import 'package:http/http.dart' as http;
 
 enum Pages {
   HOME,
@@ -20,6 +30,8 @@ enum Pages {
   CONTACTUS,
   LOGIN
 }
+
+bool governBodyMember = false;
 
 class NavDrawer extends StatefulWidget {
   const NavDrawer({Key? key}) : super(key: key);
@@ -32,6 +44,8 @@ class _NavDrawerState extends State<NavDrawer> {
   String fullName = "";
   String emailAddress = "";
   late bool x;
+  //late bool governBodyMember = false;
+  List userDetailsList = [];
 
   @override
   void initState() {
@@ -43,6 +57,11 @@ class _NavDrawerState extends State<NavDrawer> {
     });
     getEmailAddress().then((result) {
       emailAddress = result;
+    });
+    checkGovernBody().then((result) {
+      setState(() {
+        governBodyMember = result!;
+      });
     });
   }
 
@@ -94,15 +113,16 @@ class _NavDrawerState extends State<NavDrawer> {
               navigate(Pages.STATEMENTS);
             },
           ),
-          ListTile(
-            leading: const Icon(
-              Icons.approval_rounded,
+          if (governBodyMember == true)
+            ListTile(
+              leading: const Icon(
+                Icons.approval_rounded,
+              ),
+              title: const Text('Approvals'),
+              onTap: () {
+                navigate(Pages.APPROVALS);
+              },
             ),
-            title: const Text('Approvals'),
-            onTap: () {
-              navigate(Pages.APPROVALS);
-            },
-          ),
           ListTile(
             leading: const Icon(
               Icons.file_copy_rounded,
@@ -190,7 +210,7 @@ class _NavDrawerState extends State<NavDrawer> {
   }
 
   void onLogoutTap(context) {
-    AuthenticationService().logoutUser();
+    AuthenticationService.logoutUser();
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
@@ -198,6 +218,7 @@ class _NavDrawerState extends State<NavDrawer> {
       ),
       (route) => false,
     );
+    Restart.restartApp();
   }
 
   Future<String> getFullName() async {
@@ -206,5 +227,22 @@ class _NavDrawerState extends State<NavDrawer> {
 
   Future<String> getEmailAddress() async {
     return await User().emailAddress;
+  }
+
+  Future<bool?> checkGovernBody() async {
+    var username = await LocalStorageService().username();
+    var getCheckGovernBodyUrl =
+        Uri.parse('${Global.getGovernBodyEndpoint}?account=$username');
+
+    var response = await http.get(getCheckGovernBodyUrl);
+
+    if (response.statusCode == 200) {
+      bool isGovernBody = jsonDecode(response.body);
+
+      return isGovernBody;
+      print(response.body);
+    } else {
+      return null;
+    }
   }
 }

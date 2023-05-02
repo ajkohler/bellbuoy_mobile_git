@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:bellbuoy_mobile/dtos/document_dto.dart';
 import 'package:bellbuoy_mobile/services/document_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../classes/global.dart';
 import 'nav_drawer.dart';
 
 class _documentState extends State<Documents> {
@@ -34,7 +38,7 @@ class _documentState extends State<Documents> {
                     ),
                     onTap: () => {
                       //print(documents[index].path),
-                      DocumentService().openDocument(documents[index].path),
+                      openDocument(documents[index].path),
                     },
                     trailing: const Icon(Icons.arrow_forward_ios_rounded),
                   )
@@ -50,12 +54,43 @@ class _documentState extends State<Documents> {
     );
   }
 
-  Future<void> openDocument(String path) async {
-    DocumentService().updateDocuments().then((value) => {
-          setState(() {
-            documents = value;
-          })
-        });
+//Remove Region Begin
+  Future<void> _showAlertDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // <-- SEE HERE
+          title: const Text('Cannot launch URL'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Unfortunately you can not launch the url'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void openDocument(String path) async {
+    var url = Uri.parse('${Global.documentsUri}$path');
+    log('${Global.documentsUri}$path');
+    try {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } catch (Exception) {
+      _showAlertDialog();
+    }
   }
 
   Future<void> _pullRefresh() async {

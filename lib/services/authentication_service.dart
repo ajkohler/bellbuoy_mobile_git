@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 import '../classes/global.dart';
 import '../helpers/enums/authentication_results.dart';
+import '../ui/nav_drawer.dart';
 
 // Please send us a message below. Your Bellbuoy portfolio manager will respond as soon as possible.
 class AuthenticationService {
@@ -32,6 +33,7 @@ class AuthenticationService {
         if (userDetailsResponse.statusCode == 200) {
           Map<dynamic, dynamic> userDetails =
               jsonDecode(userDetailsResponse.body);
+
           var schemeDetailsResponse = await http.get(
             Uri.parse('$schemeDetailsUrl/${userDetails['SchemeId']}'),
           );
@@ -69,7 +71,7 @@ class AuthenticationService {
     }
   }
 
-  void logoutUser() {
+  static void logoutUser() {
     LocalStorageService().deleteUser();
     LocalStorageService().deleteDocuments();
     LocalStorageService().deleteSchemeMembers();

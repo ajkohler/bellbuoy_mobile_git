@@ -68,15 +68,6 @@ class LocalStorageService {
     return maps[0]['userId'];
   }
 
-  Future<void> deleteUser() async {
-    final db = await database;
-    await db.delete(
-      'users',
-      where: 'id = ?',
-      whereArgs: [1],
-    );
-  }
-
   Future<bool> userExists() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('users');
@@ -87,20 +78,28 @@ class LocalStorageService {
     }
   }
 
+  Future<void> deleteUser() async {
+    final db = await database;
+    await db.delete('users');
+  }
+
   Future<String> firstname() async {
     final db = await database;
+    var username = await LocalStorageService().username();
     final List<Map<String, dynamic>> maps = await db.query('users');
     return maps[0]['firstName'];
   }
 
   Future<String> surname() async {
     final db = await database;
+    var username = await LocalStorageService().username();
     final List<Map<String, dynamic>> maps = await db.query('users');
     return maps[0]['surname'];
   }
 
   Future<String> emailAddress() async {
     final db = await database;
+    var username = await LocalStorageService().username();
     final List<Map<String, dynamic>> maps = await db.query('users');
     return maps[0]['email'];
   }

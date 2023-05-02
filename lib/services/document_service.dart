@@ -46,15 +46,10 @@ class DocumentService {
   void openDocument(String path) async {
     var url = Uri.parse('${Global.documentsUri}$path');
     log('${Global.documentsUri}$path');
-    if (await canLaunchUrl(url)) {
-      log("Launch Document");
-      await launchUrl(
-        url,
-        mode: LaunchMode.externalApplication,
-      );
-    } else {
-      log("LaunchUrl Failed");
-      throw 'Could not launch $url';
+    try {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } catch (Exception) {
+      print('Could not open document');
     }
   }
 }

@@ -6,6 +6,7 @@ import 'package:bellbuoy_mobile/dtos/token_dto.dart';
 import 'package:http/http.dart' as http;
 
 import '../classes/global.dart';
+import '../dtos/authentication_dto.dart';
 import '../dtos/portfolio_manager_dto.dart';
 import 'local_storage_service.dart';
 

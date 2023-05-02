@@ -5,6 +5,7 @@ import 'package:bellbuoy_mobile/services/authentication_service.dart';
 import 'package:bellbuoy_mobile/ui/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_state_button/progress_button.dart';
 
 import '../helpers/enums/authentication_results.dart';
 
@@ -16,6 +17,8 @@ class Login extends StatefulWidget {
 }
 
 class _Main extends State<Login> {
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     final usernameController = TextEditingController();
@@ -59,24 +62,35 @@ class _Main extends State<Login> {
                       maxLines: 1,
                     ),
                     space,
-                    ElevatedButton(
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        isLoading
+                            ? null
+                            : attemptLogin(usernameController.text,
+                                passwordController.text);
+                      },
+                      icon: isLoading
+                          ? const CircularProgressIndicator(
+                              color: Colors.teal,
+                            )
+                          : const Icon(Icons.login),
+                      label: Text(
+                        isLoading ? ' ' : 'Login',
+                      ),
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: isLoading ? Colors.white : Colors.teal,
                         minimumSize: const Size(1000, 40),
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12)),
                         ),
                       ),
-                      onPressed: () {
-                        attemptLogin(
-                            usernameController.text, passwordController.text);
-                      },
-                      child: const Text('Login'),
                     ),
-                    TextButton(
+
+                    /*TextButton(
                       onPressed: () {},
                       child: const Text('Forgot Password?'),
-                    ),
+                    ),*/
                   ],
                 ),
               ),
@@ -104,6 +118,9 @@ class _Main extends State<Login> {
             ),
             (route) => false,
           );
+          setState(() {
+            isLoading = true;
+          });
           break;
         case AuthResults.FAIL:
           showAlert("Something went wrong... Please try again");

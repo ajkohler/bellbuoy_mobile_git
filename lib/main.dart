@@ -2,6 +2,7 @@ import 'package:bellbuoy_mobile/services/authentication_service.dart';
 import 'package:bellbuoy_mobile/ui/home.dart';
 import 'package:bellbuoy_mobile/ui/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 void main() async {
   Widget _defaultHome = new Login();
@@ -11,11 +12,16 @@ void main() async {
   if (_result) {
     _defaultHome = new Home();
   }
-  runApp(MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Bellbuoy',
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
+  runApp(
+    Phoenix(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Bellbuoy',
+        theme: ThemeData(
+          primarySwatch: Colors.teal,
+        ),
+        home: _defaultHome,
       ),
-      home: _defaultHome));
+    ),
+  );
 }
